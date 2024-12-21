@@ -21,15 +21,13 @@ export default function App() {
 
         const espDataCollection = collection(sectorDoc.ref, "esp");
         const espDocs = await getDocs(espDataCollection);
+        const data = [];
+
         for (const espDoc of espDocs.docs) {
           const espData = await getDoc(espDoc.ref);
-          master_data[sectorDoc.id] =
-          {
-            "esp": espData.data().data,
-          };
+          data.push(espData.data().mac);
         }
-
-        
+        master_data[sectorDoc.id] = data;
 
         setInfo(master_data);
         console.log(master_data);
