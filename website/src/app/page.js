@@ -50,8 +50,8 @@ export default function App() {
   const renderDynamicGrid = (data, title) => {
     if (!data) return null;
     let totalSeats = 0;
-    for (let i = 0; i < data.length; i++) {
-      totalSeats += parseInt(data[i], 10);
+    for (let i = 0; i < data.esp.length; i++) {
+      totalSeats += parseInt(data.esp[i], 10);
     }
 
     return (
@@ -62,7 +62,7 @@ export default function App() {
         <h3 className="text-3xl font-bold w-full text-center text-blue-600 mb-6">
           Total Seats Available: <span className="text-green-600">{totalSeats}</span>
         </h3>
-        <div className="grid grid-cols-4 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {data.esp.map((filledBoxes, rowIndex) => (
             <div
               className="m-4 grid grid-cols-2 w-60 h-60 border border-gray-300 rounded-2xl p-2"
@@ -90,7 +90,7 @@ export default function App() {
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-10">
-        Dynamic Grid View
+        Seats Availability
       </h1>
       {info &&
         Object.keys(info).map((key) => (
