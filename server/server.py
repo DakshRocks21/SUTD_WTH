@@ -40,11 +40,12 @@ class FirestoreHelper:
 
     def save_esp_data(self, sector_id, table_id, data):
         try:
-            doc_path = f"data/{sector_id}/esp/{table_id}/data"
+            doc_path = f"data/{sector_id}/esp/{table_id}"
             doc_ref = self.db.document(doc_path)
-            doc_ref.set(data, merge=True)
+            doc_ref.set({"data": data}, merge=True)
             return {"message": f"Data saved to {doc_path}"}
         except Exception as e:
+            print("Error", str(e))
             return {"error": str(e)}
         
     def save_model_data(self, sector_id, empty):
@@ -75,12 +76,11 @@ def add_data():
         
         mac_address = data["MAC"]
         value = data["data"]
-        #sector_id = data.get("sector_id", "1.1") # Default sector_id for now
         
-        if data.get("ID"):
+        if data.get("sectorID"):
             sector_id = data["sectorID"]
             table_id = data["tableID"]
-            save_result = firestore_helper.save_esp_data(sector_id,table_id, {"data": value})
+            save_result = firestore_helper.save_esp_data(sector_id,table_id, value)
             return jsonify({"message": "Data added successfully"}), 201
         
         table_assignment = firestore_helper.assign_table(mac_address)
@@ -89,7 +89,7 @@ def add_data():
             return jsonify({"error": table_assignment["error"]}), 500
 
         save_result = firestore_helper.save_esp_data(
-            table_assignment["sector_id"], table_assignment["table_id"], {"data": value}
+            table_assignment["sector_id"], table_assignment["table_id"],  value
         )
 
         return jsonify({"message": "Data added successfully", **table_assignment}), 201
@@ -104,7 +104,6 @@ def add_model():
         if not data:
             return jsonify({"error": "Invalid or missing data"}), 400
 
-        print(data)
         sectorID = data.get("SectorID")
         empty = data.get("empty")
         
