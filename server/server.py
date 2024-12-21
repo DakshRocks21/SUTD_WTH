@@ -42,7 +42,7 @@ class FirestoreHelper:
         try:
             doc_path = f"data/{sector_id}/esp/{table_id}"
             doc_ref = self.db.document(doc_path)
-            doc_ref.set({"data": data}, merge=True)
+            doc_ref.set({"occupied": data}, merge=True)
             return {"message": f"Data saved to {doc_path}"}
         except Exception as e:
             print("Error", str(e))
