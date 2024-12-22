@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [info, setInfo] = useState({});
-  // const [totalSeats, setTotalSeats] = useState(0);
-  // let totalSeatsTemp = 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +42,7 @@ export default function App() {
       }
       setInfo(master_data);
     };
-    fetchData();
+    setInterval(fetchData, 100);
   }, []);
 
   const renderDynamicGrid = (data, title) => {
@@ -71,7 +69,7 @@ export default function App() {
           {title}
         </h2>
         <h3 className="text-3xl font-semibold w-full text-center text-blue-600 mb-6">
-          Total Seats Available: <span className="text-green-600">{totalSeats}</span>
+          Seats Available: <span className="text-green-600">{totalSeats}</span>
         </h3>
         <div className="grid grid-cols-4 gap-4">
           {data.esp.map((filledBoxes, rowIndex) => (
@@ -98,12 +96,11 @@ export default function App() {
                       boxState = "bg-yellow-400";
                       boxText = "Choped";
                     } else if (espSubtract < modelSubtract && modelSubtract > 0) {
-                      boxState = "bg-gray-300";
+                      boxState = "bg-orange-500";
                       boxText = "Occupied Pending";
                     } else if (espSubtract <= 0 && modelSubtract <= 0) {
                       boxState = "bg-green-600";
                       boxText = "Available";
-                      //totalSeatsTemp++;
                     }
                   }
                   return (
