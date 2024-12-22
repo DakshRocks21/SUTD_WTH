@@ -5,7 +5,9 @@ import { collection, getDocs, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export default function App() {
-  const [info, setInfo] = useState(null);
+  const [info, setInfo] = useState({});
+  // const [totalSeats, setTotalSeats] = useState(0);
+  // let totalSeatsTemp = 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,8 +24,8 @@ export default function App() {
         const espDataCollection = collection(sectorDoc.ref, "esp");
         const espDocs = await getDocs(espDataCollection);
         const data = {
-          "esp" : [],
-          "model" : []
+          "esp": [],
+          "model": []
         };
 
         for (const espDoc of espDocs.docs) {
@@ -32,34 +34,43 @@ export default function App() {
         }
 
         const modelDataCollection = collection(sectorDoc.ref, "model");
-        const modelDocs = await getDocs(espDataCollection);
+        const modelDocs = await getDocs(modelDataCollection);
 
-        for (const espDoc of espDocs.docs) {
-          const espData = await getDoc(espDoc.ref);
-          data.model.push(espData.data().occupied);
+        for (const modelDoc of modelDocs.docs) {
+          const modelData = await getDoc(modelDoc.ref);
+          data.model.push(modelData.data().model);
         }
         master_data[sectorDoc.id] = data;
       }
-      console.log(master_data);
       setInfo(master_data);
     };
-
     fetchData();
   }, []);
 
   const renderDynamicGrid = (data, title) => {
-    if (!data) return null;
     let totalSeats = 0;
-    for (let i = 0; i < data.esp.length; i++) {
-      totalSeats += parseInt(data.esp[i], 10);
-    }
+    data.esp.map((filledBoxes, rowIndex) => (
+      Array(4)
+        .fill(null)
+        .map((_, colIndex) => {
+          let espSubtract = filledBoxes - (colIndex % 4);
+          let modelSubtract = 4 - (data.model[rowIndex]) - (colIndex % 4);
+
+          if ((espSubtract > 0 && modelSubtract > 0) === false) {
+            if (espSubtract <= 0 && modelSubtract <= 0) {
+              totalSeats++;
+            }
+          }
+        })
+      )
+    );
 
     return (
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-6 text-gray-700 border-b-2 border-gray-200 pb-2">
           {title}
         </h2>
-        <h3 className="text-3xl font-bold w-full text-center text-blue-600 mb-6">
+        <h3 className="text-3xl font-semibold w-full text-center text-blue-600 mb-6">
           Total Seats Available: <span className="text-green-600">{totalSeats}</span>
         </h3>
         <div className="grid grid-cols-4 gap-4">
@@ -70,16 +81,40 @@ export default function App() {
             >
               {Array(4)
                 .fill(null)
-                .map((_, colIndex) => (
-                  <div
-                    key={`row-${rowIndex}-col-${colIndex}`}
-                    className={`w-[110px] h-[110px] p-[10px] flex items-center justify-center rounded-2xl text-white font-bold text-lg ${
-                      filledBoxes > colIndex ? "bg-green-500" : "bg-gray-200"
-                    }`}
-                  >
-                    {filledBoxes > colIndex ? "Empty" : "Filled"}
-                  </div>
-                ))}
+                .map((_, colIndex) => {
+                  let espSubtract = filledBoxes - (colIndex % 4);
+                  let modelSubtract = 4 - (data.model[rowIndex]) - (colIndex % 4);
+                  let boxState = "bg-gray-300";
+                  let boxText = "Unknown";
+
+                  if (espSubtract > 0 && modelSubtract > 0) {
+                    boxState = "bg-gray-300";
+                    boxText = "Filled";
+                  } else {
+                    if (espSubtract === modelSubtract && espSubtract > 0) {
+                      boxState = "bg-gray-300";
+                      boxText = "Filled";
+                    } else if (espSubtract > modelSubtract && espSubtract > 0) {
+                      boxState = "bg-yellow-400";
+                      boxText = "Choped";
+                    } else if (espSubtract < modelSubtract && modelSubtract > 0) {
+                      boxState = "bg-gray-300";
+                      boxText = "Occupied Pending";
+                    } else if (espSubtract <= 0 && modelSubtract <= 0) {
+                      boxState = "bg-green-600";
+                      boxText = "Available";
+                      //totalSeatsTemp++;
+                    }
+                  }
+                  return (
+                    <div
+                      key={`row-${rowIndex}-col-${colIndex}`}
+                      className={`w-[110px] h-[110px] p-[10px] flex items-center justify-center rounded-2xl text-white font-bold text-lg ${boxState}`}
+                    >
+                      {boxText}
+                    </div>
+                  );
+                })}
             </div>
           ))}
         </div>
@@ -89,7 +124,7 @@ export default function App() {
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
-      <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-10">
+      <h1 className="text-5xl font-bold text-center text-gray-800 mb-10">
         Seats Availability
       </h1>
       {info &&
