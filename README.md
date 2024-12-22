@@ -37,11 +37,11 @@ Having a really short time to work with stressed us out a bit, and it took teamw
 
 ## Accomplishments that we're proud of, and what we learned
 All of us have quite diverse skillsets, and we took different roles during the project:\
-Daksh - Server setup and Website Coding\
-Jing Shun - Computer Vision guy\
-Chin Ray - Website Coding\
-Samuel - Insane Electronics carry\
-Richard - Chief yapper, also the guy who wrote this bedtime story of an essay
+@DakshRocks21 - Server setup and Website Coding\
+@fisherman-23 - Computer Vision guy\
+@orangegrouptech - Website Coding\
+@HardTech-No - Insane Electronics carry\
+@tyzrichard - Chief yapper, also the guy who wrote this bedtime story of an essay
 
 Our roles overlapped often during the project, so we were able to learn lots from each other. In these two days, we discussed about CV, to Machine Learning, to obscure electronic manuals from the 80s, to the argument that XML > React (??)
 
