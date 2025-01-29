@@ -1,4 +1,11 @@
 # What The Hack 2024!!
+
+![](https://raw.githubusercontent.com/DakshRocks21/SUTD_WTH/refs/heads/main/images/admin_setup.jpg)
+![](https://raw.githubusercontent.com/DakshRocks21/SUTD_WTH/refs/heads/main/images/image1.jpg)
+![](https://raw.githubusercontent.com/DakshRocks21/SUTD_WTH/refs/heads/main/images/hardware.jpg)
+
+
+
 ## Who are we?
 Hello! We are team The Undefined (yeah, that's our team name) participating in What the Hack 2024, presenting a solution to make finding seats at food courts seamless and hassle-free.
 All people in our team have experienced this frustration - our school, Ngee Ann Poly, only has ***THREE*** food courts despite its humongous student population. For comparison, Singapore Poly has 6 of them!
